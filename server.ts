@@ -1,14 +1,9 @@
-import {serve} from 'https://deno.land/std@0.62.0/http/server.ts';
+import {Application} from 'https://deno.land/x/oak/mod.ts';
+import { router } from "./router.ts";
 
-const s = serve({port:8000});
+const app = new Application();
 
-for await (const req of s) {
-  const body = 'Hello world';
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-  const enc = new TextEncoder();
-  const data = enc.encode(body);
-
-  await Deno.writeFile('hello.txt', data);
-
-  req.respond({body});
-}
+await app.listen("localhost:3000");
